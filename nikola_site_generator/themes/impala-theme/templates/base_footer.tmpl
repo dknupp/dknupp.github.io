@@ -1,0 +1,49 @@
+{#  -*- coding: utf-8 -*- #}
+{% import 'base_helper.tmpl' as base with context %}
+
+{% macro html_footer() %}
+  <footer id="footer">
+    <p>&nbsp;</p>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+
+          <ul class="nav">
+            <li><a href="https://www.apache.org/licenses/">License</a></li>
+            <li><a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+            <li><a href="https://www.apache.org/foundation/thanks.html">Thanks</a></li>
+            <li><a href="https://www.apache.org/security/">Security</a></li>
+            <li><a href="https://www.apache.org/">Apache Software Foundation</a></li>
+          </ul>
+
+        </div><!-- container -->
+      </div><!-- navbar-inner -->
+    </div><!-- navbar -->
+
+    <div class="footer">
+      <!-- <p class="pull-right"><img src="/assets/css/images/incubator.png"></p> -->
+      <p class="pull-right"><img src="/../img/incubator.png"></p>
+
+      <p class="muted"><font size="-1">
+        Apache Impala is an effort undergoing incubation at the Apache Software Foundation
+        (ASF), sponsored by the Apache Incubator PMC. Incubation is required of all newly
+        accepted projects until a further review indicates that the infrastructure,
+        communications, and decision making process have stabilized in a manner consistent
+        with other successful ASF projects. While incubation status is not necessarily a
+        reflection of the completeness or stability of the code, it does indicate that the
+        project has yet to be fully endorsed by the ASF.
+      </font></p>
+
+      <p class="muted"><font size="-1">
+        Apache Impala, Impala, Apache, the Apache feather logo, and the Apache Impala
+        project logo are either registered trademarks or trademarks of The Apache Software
+        Foundation in the United States and other countries.
+      </font></p>
+    </div><!-- footer -->
+
+    {% if content_footer %}
+      <p>{{ content_footer }}</p>
+      {{ template_hooks['page_footer']() }}
+    {% endif %}
+  </footer>
+{% endmacro %}

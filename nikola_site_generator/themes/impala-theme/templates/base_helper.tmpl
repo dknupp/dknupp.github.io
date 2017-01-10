@@ -1,0 +1,130 @@
+{#  -*- coding: utf-8 -*- #}
+
+{% macro html_tag() %}
+    <html \
+    prefix='
+    {% if use_open_graph or (twitter_card and twitter_card['use_twitter_cards']) %}
+    og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    {% endif %}
+    {% if comment_system == 'facebook' %}
+    fb: http://ogp.me/ns/fb#
+    {% endif %}
+    ' \
+    {% if use_open_graph or (twitter_card and twitter_card['use_twitter_cards']) %}
+    vocab="http://ogp.me/ns" \
+    {% endif %}
+    {% if is_rtl %}
+    dir="rtl"
+    {% endif %}
+
+    lang="{{ lang }}">
+{% endmacro %}
+
+{% macro setup_head_tag() %}
+    <meta name="keywords" content="hadoop, impala, sql, mpp, bi, big data, open source" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+    {% if use_base_tag %}
+        <base href="{{ abs_link(permalink) }}">
+    {% endif %}
+
+    {% if description %}
+        <meta name="description" content="{{ description|e }}">
+    {% endif %}
+
+    {% if title == blog_title %}
+        <title>{{ blog_title|e }}</title>
+    {% else %}
+        <title>{{ title|e }} | {{ blog_title|e }}</title>
+    {% endif %}
+
+    {{ html_stylesheets() }}
+    <meta content="{{ theme_color }}" name="theme-color">
+    {{ html_feedlinks() }}
+    <link rel="canonical" href="{{ abs_link(permalink) }}">
+
+    {% if favicons %}
+        {% for name, file, size in favicons %}
+            <link rel="{{ name }}" href="{{ file }}" sizes="{{ size }}"/>
+        {% endfor %}
+    {% endif %}
+
+    {% if comment_system == 'facebook' %}
+        <meta property="fb:app_id" content="{{ comment_system_id }}">
+    {% endif %}
+
+    {% if prevlink %}
+        <link rel="prev" href="{{ prevlink }}" type="text/html">
+    {% endif %}
+    {% if nextlink %}
+        <link rel="next" href="{{ nextlink }}" type="text/html">
+    {% endif %}
+
+    {{ extra_head_data }}
+{% endmacro %}
+
+<!-- Used if we want to enable code for liking/reposting/retweeting blog content
+     to social media. The 'social_buttons_code' is defined in conf.py. -->
+{% macro late_load_js() %}
+    {{ social_buttons_code }}
+{% endmacro %}
+
+{% macro html_stylesheets() %}
+    {% if use_bundles %}
+        {% if use_cdn %}
+            <link href="/assets/css/all.css" rel="stylesheet" type="text/css">
+        {% else %}
+            <link href="/assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+        {% endif %}
+    {% else %}
+        <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css">
+
+        <!-- order is significant to prevent overwriting of some bootstrap-defined css styles -->
+        <link href="/assets/css/additional_styles.css" rel="stylesheet" type="text/css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-67190974-2', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        {% if has_custom_css %}
+            <link href="/assets/css/custom.css" rel="stylesheet" type="text/css">
+        {% endif %}
+    {% endif %}
+    {% if needs_ipython_css %}
+        <link href="/assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+        <link href="/assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+    {% endif %}
+{% endmacro %}
+
+{% macro html_feedlinks() %}
+    {% if rss_link %}
+        {{ rss_link }}
+    {% elif generate_rss %}
+        {% if translations|length > 1 %}
+            {% for language in translations|sort %}
+                <link rel="alternate" type="application/rss+xml" title="RSS ({{ language }})" href="{{ _link('rss', None, language) }}">
+            {% endfor %}
+        {% else %}
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ _link('rss', None) }}">
+        {% endif %}
+    {% endif %}
+    {% if generate_atom %}
+        {% if translations|length > 1 %}
+            {% for language in translations|sort %}
+                <link rel="alternate" type="application/atom+xml" title="Atom ({{ language }})" href="{{ _link('index_atom', None, language) }}">
+            {% endfor %}
+        {% else %}
+            <link rel="alternate" type="application/atom+xml" title="Atom" href="{{ _link('index_atom', None) }}">
+        {% endif %}
+    {% endif %}
+{% endmacro %}

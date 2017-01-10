@@ -1,0 +1,21 @@
+{#  -*- coding: utf-8 -*- #}
+
+<!-- Adds the Newer posts and Older posts navigation element to the page -->
+{% macro html_pager() %}
+    {% if prevlink or nextlink %}
+        <nav class="postindexpager">
+        <ul class="pager">
+        {% if prevlink %}
+            <li class="previous">
+                <a href="{{ prevlink }}" rel="prev">{{ messages("Newer posts") }}</a>
+            </li>
+        {% endif %}
+        {% if nextlink %}
+            <li class="next">
+                <a href="{{ nextlink }}" rel="next">{{ messages("Older posts") }}</a>
+            </li>
+        {% endif %}
+        </ul>
+        </nav>
+    {% endif %}
+{% endmacro %}
